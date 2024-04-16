@@ -20,50 +20,24 @@ int wmain(int argc, wchar_t* argv[])
 
     std::wcout << L"Chương trình đọc và xuất chuỗi tiếng Việt\n\n";
 
-    // nhập họ tên
     std::wstring username;
-    std::wcout << L"Nhập họ tên của bạn: ";
-    std::getline(std::wcin, username);
-    std::wcout << L">> Xin chào, " << username << L"!\n\n";
-
-    // nhập giới tính
-    wchar_t gender;
-    std::wcout << L"Bạn là nam hay nữ:\n a. Nam\n b. Nữ\n";
-    std::wcin >> gender;
-    std::wcout << L">> Giới tính: ";
-    if      (gender == L'a') std::wcout << L"Nam\n\n";
-    else if (gender == L'b') std::wcout << L"Nữ\n\n";
-    else                     std::wcout << L"Không xác định\n\n";
-
-    // nhập tuổi
+    std::wstring gender;
     int age;
-    std::wcout << L"Nhập tuổi của bạn: ";
-    std::wcin >> age;
-    std::wcout << L">> Năm nay bạn được " << age << L" tuổi\n\n";
 
 
-    // lưu file tiếng Việt (UTF-8 without BOM)
+    //// lưu file tiếng Việt (UTF-8 without BOM)
     std::locale loc(std::locale(), new std::codecvt_utf8<wchar_t>);  // UTF-8
-    std::wofstream fout(L"userinfo-c++.txt");
-    if (!fout) {
-        std::wcout << L"Không thể tạo file userinfo-c++.txt\n";
-    } else {
-        fout.imbue(loc);
-        fout << username << L"\n" << gender << L"\n" << age << L"\n";
-        fout.close();
-    }
-    
-    // đọc file tiếng Việt (định dạng UTF-8 without BOM)
-    std::wifstream fin(L"userinfo-c++.txt");
+    std::wifstream fin(L"userinfo-c++.csv");
     if (!fin) {
-        std::wcout << L"Không thể đọc file userinfo-c++.txt\n";
+        std::wcout << L"Không thể đọc file userinfo-c++.csv\n";
     } else {
         fin.imbue(loc);
         std::getline(fin, username);
-        fin >> gender >> age;
+        std::getline(fin, gender);
+        fin >> age;
 
         std::wcout << L"Họ tên: " << username << L"\nGiới tính: " 
-                   << (gender == L'a' ? L"Nam" : (gender == L'b' ? L"Nữ" : L"Không xác định"))
+                   << gender
                    << L"\nTuổi: " << age << L"\n\n";
 
         fin.close();
